@@ -56,4 +56,5 @@ class Recipe
     def allergens
         ingredients.select {|ingredient| ingredient.allergies.length > 0}
     end
+    
 end

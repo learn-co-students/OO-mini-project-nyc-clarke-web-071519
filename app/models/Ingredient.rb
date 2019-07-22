@@ -23,4 +23,12 @@ class Ingredient
         self.all.max_by {|ingredient| ingredient.allergy_users.length }
     end
 
+    def recipe_cards
+        RecipeIngredient.all.select {|recipe_ingredient| recipe_ingredient.ingredient == self }
+    end
+
+    def recipies
+        recipe_cards.map {|recipe_card| recipe_card.recipe}
+    end
+
 end

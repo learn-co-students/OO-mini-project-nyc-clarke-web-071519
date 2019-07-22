@@ -39,7 +39,8 @@ class User
     # - `User#allergens`
     # should return all of the ingredients this user is allergic to
     def allergens
-        Allergy.all.select {|allergy| allergy.user == self}
+        allergies = Allergy.all.select {|allergy| allergy.user == self}
+        allergies.map {|allergy| allergy.ingredient}
     end
 
     # - `User#top_three_recipes`
@@ -54,6 +55,15 @@ class User
     # should return the recipe most recently added to the user's cookbook.
     def most_recent_recipe
         RecipeCard.all.max_by{|recipe_card| Time.parse(recipe_card.date)}.recipe
+    end
+
+    # - User#safe_recipes should return all recipes that do not contain ingredients the user is allergic to
+    def safe_recipes
+        Recipe.all.select do |recipe|
+            recipe.ingredients.none? do |ingredient|
+                allergens.include?(ingredient)
+            end
+        end
     end
 
 end
